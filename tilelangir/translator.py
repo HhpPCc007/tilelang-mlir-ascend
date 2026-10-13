@@ -257,7 +257,7 @@ class TileLangIRTranslator(PyStmtExprVisitor):
     #############
     def _emit_alloc_buffer(self, buffer: Any) -> Any:
         scope = str(buffer.scope())
-        if scope in ("shared", "shared.dyn"):
+        if scope in ("shared", "shared.dyn", "l1"):
             return self._emit_shared_buffer(buffer)
 
         # Register fragments are logical typed allocations.  Unlike shared
@@ -956,6 +956,14 @@ class TileLangIRTranslator(PyStmtExprVisitor):
             address_space = 1
         elif scope == "local.fragment":
             address_space = 2
+        elif scope == "l1":
+            address_space = 3
+        elif scope == "l0a":
+            address_space = 4
+        elif scope == "l0b":
+            address_space = 5
+        elif scope == "l0c":
+            address_space = 6
         else:
             raise NotImplementedError(
                 f"TileLangIR has no memory-space mapping for TIRX scope {scope!r}."
